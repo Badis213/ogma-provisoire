@@ -48,7 +48,7 @@ def home():
 # Route pour afficher le formulaire d'inscription (GET)
 @app.route('/register', methods=['GET'])
 def show_register_form():
-    return render_template('./template/inscription-provisoire.html')  # Affiche le formulaire HTML d'inscription
+    return render_template('inscription-provisoire.html')  # Affiche le formulaire HTML d'inscription
 
 # Route pour traiter le formulaire d'inscription (POST)
 @app.route('/register', methods=['POST'])
