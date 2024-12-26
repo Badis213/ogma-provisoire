@@ -46,8 +46,12 @@ def home():
     # Rediriger l'utilisateur vers la route /register
     return redirect(url_for('register'))
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'GET':
+        return "Bienvenue sur la page d'inscription. Veuillez envoyer un POST pour vous inscrire."
+    
+    # Si la méthode est POST, traiter l'inscription
     data = request.get_json()
     nom = data.get('nom')
     prenom = data.get('prenom')
@@ -73,6 +77,7 @@ def register():
     db.session.commit()
 
     return jsonify({"message": "Utilisateur enregistré avec succès"}), 201
+
 
 if __name__ == '__main__':
     app.run(debug=True)
