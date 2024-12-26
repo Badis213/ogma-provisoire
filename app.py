@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -82,6 +82,20 @@ def register():
     except Exception as e:
         return jsonify({"message": f"Une erreur est survenue : {str(e)}"}), 500
 
+# Route pour télécharger la base de données
+@app.route('/download-db', methods=['GET', 'POST'])
+def download_db():
+    if request.method == 'POST':
+        # Vérification du mot de passe
+        mot_de_passe = request.form.get('password')
+        if mot_de_passe != "Badis_J135@":  # Comparaison du mot de passe
+            return jsonify({"message": "Mot de passe incorrect"}), 403  # Retourner une erreur 403 si le mot de passe est incorrect
+
+        # Si le mot de passe est correct, renvoyer le fichier de base de données
+        db_file = os.path.join(instance_path, "dbprovisoire.db")
+        return send_file(db_file, as_attachment=True)  # Envoie le fichier en téléchargement
+
+    return render_template('download-db.html')  # Affiche le formulaire pour entrer le mot de passe
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accéder à la base de données</title>
+    <link rel="stylesheet" href="../static/download.css">
+</head>
+<body>
+    <h1>Entrez le mot de passe pour télécharger la base de données</h1>
+    <form action="/download-db" method="POST">
+        <input type="password" name="password" required placeholder="Mot de passe">
+        <button type="submit">Valider</button>
+    </form>
+</body>
+</html>
