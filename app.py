@@ -1,9 +1,10 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
+
 
 # Initialisation de l'application Flask
 app = Flask(__name__)
@@ -39,6 +40,11 @@ class User(db.Model):
 # Créer la base de données
 with app.app_context():
     db.create_all()
+
+@app.route('/')
+def home():
+    # Rediriger l'utilisateur vers la route /register
+    return redirect(url_for('register'))
 
 @app.route('/register', methods=['POST'])
 def register():
