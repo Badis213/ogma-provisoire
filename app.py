@@ -1,10 +1,9 @@
 import os
-from flask import Flask, request, jsonify, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS
-
 
 # Initialisation de l'application Flask
 app = Flask(__name__)
@@ -41,22 +40,23 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
+# Route d'accueil (redirection vers /register)
 @app.route('/')
 def home():
-    # Rediriger l'utilisateur vers la route /register
-    return redirect(url_for('register'))
+    return redirect(url_for('show_register_form'))  # Redirige vers la page d'inscription
 
-@app.route('/register', methods=['GET', 'POST'])
+# Route pour afficher le formulaire d'inscription (GET)
+@app.route('/register', methods=['GET'])
+def show_register_form():
+    return render_template('inscription-provisoire.html')  # Affiche le formulaire HTML d'inscription
+
+# Route pour traiter le formulaire d'inscription (POST)
+@app.route('/register', methods=['POST'])
 def register():
-    if request.method == 'GET':
-        return "Bienvenue sur la page d'inscription. Veuillez envoyer un POST pour vous inscrire."
-    
-    # Si la méthode est POST, traiter l'inscription
-    data = request.get_json()
-    nom = data.get('nom')
-    prenom = data.get('prenom')
-    email = data.get('email')
-    password = data.get('password')
+    nom = request.form.get('nom')
+    prenom = request.form.get('prenom')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     # Vérification des champs
     if not all([nom, prenom, email, password]):
@@ -77,7 +77,6 @@ def register():
     db.session.commit()
 
     return jsonify({"message": "Utilisateur enregistré avec succès"}), 201
-
 
 if __name__ == '__main__':
     app.run(debug=True)
